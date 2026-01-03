@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class GrafoLista<T> {
+
     private List<Nodo<T>> nodos;
     private boolean esDirigido;
 
@@ -24,16 +25,12 @@ public class GrafoLista<T> {
                 return n;
             }
         }
-        return null; 
+        return null;
     }
-    
-    public void llenarCombo(T dato){
-        Nodo<T>  nodo = buscarNodo(dato);
-        
-    }
+
     public void agregarVertice(T dato) {
         if (buscarNodo(dato) == null) {
-            nodos.add(new Nodo<>(dato));  
+            nodos.add(new Nodo<>(dato));
         }
     }
 
@@ -54,7 +51,7 @@ public class GrafoLista<T> {
 
     public String obtenerGrafoTexto() {
         String texto = "";
-        
+
         for (Nodo<T> n : nodos) {
             texto += n.getDato() + " es amigo de: [ ";
             for (Nodo<T> vecino : n.getVecinos()) {
@@ -67,10 +64,12 @@ public class GrafoLista<T> {
 
     public String bfsTexto(T inicio) {
         Nodo<T> nodoInicio = buscarNodo(inicio);
-        if (nodoInicio == null) return "El estudiante no existe.";
+        if (nodoInicio == null) {
+            return "El estudiante no existe.";
+        }
 
         String resultado = "Recorrido BFS (Niveles) desde " + inicio + ":\n";
-        
+
         List<Nodo<T>> visitados = new ArrayList<>();
         Queue<Nodo<T>> cola = new LinkedList<>();
 
@@ -94,7 +93,9 @@ public class GrafoLista<T> {
 
     public String dfsTexto(T inicio) {
         Nodo<T> nodoInicio = buscarNodo(inicio);
-        if (nodoInicio == null) return "El estudiante no existe.";
+        if (nodoInicio == null) {
+            return "El estudiante no existe.";
+        }
 
         List<Nodo<T>> ordenVisita = new ArrayList<>();
         dfsRecursivo(nodoInicio, ordenVisita);
@@ -104,24 +105,40 @@ public class GrafoLista<T> {
             resultado += n.getDato() + " -> ";
         }
         resultado += "FIN";
-        
+
         return resultado;
     }
 
     private void dfsRecursivo(Nodo<T> actual, List<Nodo<T>> visitados) {
         visitados.add(actual);
-        
+
         for (Nodo<T> vecino : actual.getVecinos()) {
             if (!visitados.contains(vecino)) {
                 dfsRecursivo(vecino, visitados);
             }
         }
     }
-    public ArrayList<T> obtenerListaNodos(){
+
+    public ArrayList<T> obtenerListaNodos() {
         ArrayList<T> lista = new ArrayList<>();
-        for(Nodo<T> nodo : nodos){
-          lista.add(nodo.getDato());
+        for (Nodo<T> nodo : nodos) {
+            lista.add(nodo.getDato());
         }
         return lista;
+    }
+
+    public String obtenerGrafoCursos() {
+        String texto = "";
+
+        for (Nodo<T> n : nodos) {
+
+            texto += n.getDato() + " es prerrequisito de: [ ";
+
+            for (Nodo<T> vecino : n.getVecinos()) {
+                texto += vecino.getDato() + " ";
+            }
+            texto += "]\n";
+        }
+        return texto;
     }
 }
